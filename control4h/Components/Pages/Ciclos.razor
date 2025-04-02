@@ -1,0 +1,193 @@
+﻿@page "/ciclos"
+@rendermode InteractiveServer
+<h3>Ciclos</h3>
+<div class="mb-3">
+    <label for="txtlimite" class="form-label">Limite</label>
+    <input type="number" class="form-control" id="txtlimite" @bind="_limite" aria-describedby="limite">
+</div>
+<button class="btn btn-success" @onclick="Generar">Generar</button>
+
+<h3 class="mt-3">@((MarkupString)_salida)</h3>
+
+<div class="mb-3">
+    <label for="dato" class="form-label">Dato</label>
+    <input type="number" class="form-control" id="dato" @bind="_dato" aria-describedby="dato">
+</div>
+
+<button class="btn btn-success" @onclick="Buscar">Buscar</button>
+<button class="btn btn-success" @onclick="Buscar">Ordenar</button>
+<button class="btn btn-success" @onclick="Invertir">Invertir</button>
+<button class="btn btn-success" @onclick="Pares">Pares</button>
+
+<div class="mt-3">
+    <p> Calificacion mayor: @_mayor</p>
+    <p> Calificacion menor: @_menor</p>
+    <p> Promedio: @_promedio.ToString("0.0")</p>
+</div>
+
+<div>
+    <div class="col">
+        <div class="alert alert-info">@_salida</div>
+    </div>
+</div>
+
+
+
+@* // pares *@
+@* <table class="table table striped">
+    <thead>
+        <tr>
+            <th>#</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i <= _limite; i+=2)
+        {
+            <tr>
+                <td>@i.ToString()</td>
+            </tr>
+        }
+    </tbody>
+</table> *@
+
+@* //impares *@
+
+@* <table class="table table striped">
+    <thead>
+        <tr>
+            <th>#</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 1; i <= _limite; i += 2)
+        {
+            <tr>
+                <td>@i.ToString()</td>
+            </tr>
+        }
+    </tbody>
+</table> *@
+
+@* //calificaciones *@
+
+<table class="table table striped">
+    <thead>
+        <tr>
+            <th>#</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (_calificaciones.Count() > 0) // metodo count de coleccion me regresa el numero de elementos que tiene una coleccion 
+            @for (int i = 0; i < _limite; i ++)
+            {
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td>@_calificaciones[i]</td> 
+                    @* para tener acesso a los elemtos de la coleccion es con indice i , se inicia en la posicion 0 , y se va recorriendo poco  a poco*@
+                </tr>
+            }
+    </tbody>
+</table>
+
+@* recorrer con foreach especificamente en colecciones *@
+<table class="table table striped">
+    <thead>
+        <tr>
+            <th>#</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (_calificaciones.Count() > 0) // metodo count de coleccion me regresa el numero de elementos que tiene una coleccion
+            @foreach (int valor in _calificaciones)
+            {
+                <tr>
+                    <td>@valor</td>
+                    @* para tener acesso a los elemtos de la coleccion es con indice i , se inicia en la posicion 0 , y se va recorriendo poco  a poco*@
+                </tr>
+            }
+    </tbody>
+</table>
+
+
+@code {
+    private int _limite;
+    private string _salida = "";
+    private int _menor;
+    private int _mayor;
+    private int _dato;
+    private List<int> _calificaciones = new List<int>();
+    double _promedio;
+
+
+    private void Pares()
+    {
+        _calificaciones = _calificaciones.Where(r => r % 2 == 0).ToList(); // Filtrar pares
+    }
+
+    private void Eliminar()
+    {
+        // _calificaciones.Remove(_dato); // Dato que se quiere eliminar
+        _calificaciones.RemoveAt(_dato); //Indice del dato que se quiere eliminar
+    }
+
+    private void Invertir()
+    {
+        _calificaciones.Reverse();
+    }
+
+    private void Buscar()
+    {
+        // _salida = (_calificaciones.Contains(_dato)) ? "ENCONTRADO" : "No encontrado"; // Reguesa true o false
+        // _salida = _calificaciones.IndexOf(_dato).ToString();
+        // _calificaciones.Insert(2, _dato);
+        _calificaciones.Sort(); //Ordenar
+    }
+
+
+    private void Generar()
+    {
+        // clase o coleccion de tipo random
+        Random _aleatorio = new(); // clase de utileria del tipo math (genera numeros aleatorios). Crea un objeto y con next regresa el numero entre 0 y menor que dicho numero
+        _calificaciones.Clear(); // clear significa elimina todos los elementos que tenga tu coleccion y empiezo desde 0 volviendo a agregar
+        for (int i = 0; i < _limite; i++)
+        {
+            _calificaciones.Add(_aleatorio.Next(11));
+        }
+        _menor = 10;
+        _mayor = 0;
+        _promedio = 0;
+        foreach( int valor in _calificaciones)
+        {
+            if (valor < _menor)
+            {
+                _menor = valor;
+            }
+            if (valor > _mayor)
+            {
+                _mayor = valor;
+            }
+            _promedio += valor;
+        }
+        _promedio /= _calificaciones.Count();
+
+
+        // int i = 1;
+        // _salida = "";
+        // while(i < _limite)
+        // {
+        //     _salida += i.ToString() + "<br>";
+        //     i++; 
+        // }
+
+        // _salida = "";
+        // for(int i = 1; i <= _limite; i++)
+        // {
+        //     if(i == 7)
+        //     {
+        //         //break;
+        //         continue;
+        //     }
+        //     _salida += i.ToString() + "<br>";
+        // }
+    }
+}

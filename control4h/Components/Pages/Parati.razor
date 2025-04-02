@@ -1,0 +1,83 @@
+﻿@page "/parati"
+@rendermode InteractiveServer
+
+<h3>Parati</h3>
+<div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-pink-500 to-red-500 text-white text-center p-6">
+    <h1 class="text-4xl font-bold mb-6">💖 Un mensaje especial 💖</h1>
+
+    @if (!mostrarFraseFinal)
+    {
+        <button @onclick="SiguientePaso" class="bg-white text-pink-600 px-6 py-3 rounded-full shadow-lg font-semibold hover:bg-pink-100 transition">
+            @if (paso == 0)
+            {
+                <span>Haz clic aquí</span>
+                ;
+            }
+            @if (paso == 1)
+            {
+                <span>Muy bien, ahora selecciona el siguiente</span>
+                ;
+            }
+            @if (paso == 2)
+            {
+                <span>Ya casi, estás en la meta, solo un botón más</span>
+                ;
+            }
+        </button>
+    }
+
+    @if (mostrarLetra)
+    {
+        <!-- Letra de la canción visible antes de que el usuario vea el enlace -->
+        <div class="mt-6 text-lg font-light text-black text-center max-w-xl mx-auto">
+            <br />
+            <p>
+                "if ( si te vas == quiero ir contigo)"<br />
+                And if you go, I wanna go with you<br /><br />
+                "if( si mueres == quiero morir contigo)"<br />
+                And if you die, I wanna die with you"
+            </p>
+            <br />
+        </div>
+
+        <button @onclick="SiguientePaso" class="bg-white text-pink-600 px-6 py-3 rounded-full shadow-lg font-semibold hover:bg-pink-100 transition mt-6">
+            ¡Escuchar la canción! 🎶
+        </button>
+    }
+
+    @if (mostrarFraseFinal)
+    {
+        <div class="mt-6 text-xl font-medium">
+            <p><span class="text-yellow-300">if</span> (te vas == me iré contigo) { }</p>
+            <p><span class="text-yellow-300">if</span> (te mueres == moriré contigo) { }</p>
+        </div>
+
+        <!-- Enlace de redirección al video de YouTube -->
+        <a href="https://youtu.be/DnGdoEa1tPg?si=w8Tqd15wYxT4xQDH" target="_blank" class="mt-6 bg-white text-pink-600 px-6 py-3 rounded-full shadow-lg font-semibold hover:bg-pink-100 transition">
+            ¡Escucha la canción aquí! 🎶
+        </a>
+    }
+</div>
+
+@code {
+    private int paso = 0;
+    private bool mostrarLetra = false;
+    private bool mostrarFraseFinal = false;
+
+    private void SiguientePaso()
+    {
+        if (paso < 2)
+        {
+            paso++;
+        }
+        else if (paso == 2)
+        {
+            mostrarLetra = true; // Mostrar la letra antes de permitir el enlace
+        }
+        else
+        {
+            mostrarFraseFinal = true; // Mostrar el enlace de la canción
+        }
+    }
+}
+

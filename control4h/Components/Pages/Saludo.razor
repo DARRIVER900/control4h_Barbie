@@ -1,0 +1,45 @@
+﻿@page "/saludo"
+@rendermode InteractiveServer
+<h3>Hola @_letrero</h3>
+
+<div class="mb-3">
+    <label for="nombre" class="form-label">Nombre</label>
+    <input type="text" class="form-control" id="nombre" @bind="_nombre" aria-describedby="nombre">
+</div>
+<button class="btn btn-success" @onclick="Saludar">Saludar</button>
+<div class="mb-3">
+    <label for="edad" class="form-label">Edad</label>
+    <input type="number" class="form-control" id="edad" @bind="_edad">
+</div>
+<button class="btn btn-success" @onclick="Validar">Validar</button>
+
+@code {
+    // asi se ponen las variables
+
+    private string _nombre = "";
+    private string? _letrero, _letreroEdad;
+    private int _edad;
+    private bool _validado = false;
+
+    // asi se´ponen funciones
+    private void Saludar()
+    {
+        _letrero = _nombre;
+    }
+
+    // asi se ponen if
+
+    private void Validar()
+    {
+        if (_edad >= 18)
+        {
+            _letreroEdad = "Eres MAYOR de edad";
+        }
+        else
+        {
+            _letreroEdad = "Eres MENOR de edad";
+        }
+
+    }
+}
+

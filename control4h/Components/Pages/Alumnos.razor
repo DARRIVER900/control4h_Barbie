@@ -1,0 +1,96 @@
+﻿@page "/alumnos"
+@* ctrl . *@ 
+@rendermode InteractiveServer
+<h3>Capturar alumnos</h3>
+<h4>Alumnos capturados: @_alumnos.Count()</h4>
+
+
+<EditForm Model="_alumno" FormName="frmAlumno" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="mb-3">
+        <label for="txtNombre" class="form-label">Nombre</label>
+        <InputText @bind-Value="_alumno.Nombre" class="form-control" id="txtNombre" />
+        <ValidationMessage For="() =>_alumno.Nombre" />
+    </div>
+    <div class="mb-3">
+        <label for="txtCorreo" class="form-label">Correo</label>
+        <InputText @bind-Value="_alumno.Correo" class="form-control" id="txtCorreo" />
+        <ValidationMessage For="() =>_alumno.Correo" />
+    </div>
+    <div class="mb-3">
+        <label for="txtEdad" class="form-label">Edad</label>
+        <InputNumber @bind-Value="_alumno.Edad" class="form-control" id="txtEdad" />
+        <ValidationMessage For="() =>_alumno.Edad" />
+    </div>
+    <div class="mb-3">
+        <label for="txtGenero" class="form-label">Genero</label>
+        <InputRadioGroup @bind-Value="_alumno.Genero" Name="rdgGenero" class="form-check-input" >
+            <InputRadio Value="@("Mujer")"/> Mujer
+            <InputRadio Value="@("Hombre")" class="ms-3" /> Hombre
+            <InputRadio Value="@("Sin informar")" class="ms-3"/>Sin informar
+        </InputRadioGroup>
+
+        <ValidationMessage For="() =>_alumno.Genero" />
+    </div>
+    <button type="submit" class="btn btn-success">Guardar</button>
+</EditForm>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                Nombre
+            </th>
+            <th>
+                Correo
+            </th>
+            <th>
+                Edad
+            </th>
+            <th>
+                Genero
+            </th>
+            <th>
+                Acciones
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Persona persona in _alumnos)
+        {
+            <tr>
+                <td>@persona.Nombre</td>
+                <td>@persona.Correo</td>
+                <td>@persona.Edad</td>
+                <td>@persona.Genero</td>
+                <td>
+                    <button class="btn btn-outline-danger" @onclick="()=>Eliminar(persona)"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                    </svg>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private Persona _alumno = new();
+    private List<Persona> _alumnos = new();
+    // {Nombre = "Barbara", 
+    // Correo = "brivera8@ucol.mx",
+    // Edad = 19
+    // };
+
+    private void Guardar()
+    {
+        _alumnos.Add(new Persona {Nombre = _alumno.Nombre, Correo = _alumno.Correo, Edad = _alumno.Edad, Genero = _alumno.Genero });
+        _alumno = new();
+    }
+    private void Eliminar(Persona _persona)
+    {
+        _alumnos.Remove(_persona);
+    }
+}

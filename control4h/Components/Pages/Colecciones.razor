@@ -1,0 +1,186 @@
+﻿@page "/ciclos"
+@rendermode InteractiveServer
+
+<h3>Ciclos</h3>
+
+<div class="mb-3">
+    <label for="txtLimte" class="form-label">Límite</label>
+    <input type="number" class="form-control" id="txtLimite" @bind="_limite" /> <!--El bind hace la liga entre el html y la memoria de C#, lo que exista en memoria lo va a poner la input y lo que haiga en el input lo va a copiar en la memoria-->
+</div>
+<button class="btn btn-success" @onclick="Generar">Generar</button>
+
+@* <h3 class="mt-3">@((MarkupString)_salida)</h3> Mostrar cadena de salida *@
+
+
+<div class="my-3">
+    <label for="txtDato" class="form-label">Dato</label>
+    <input type="number" class="form-control" id="txtDato" @bind="_dato" /> <!--El bind hace la liga entre el html y la memoria de C#, lo que exista en memoria lo va a poner la input y lo que haiga en el input lo va a copiar en la memoria-->
+</div>
+<button class="btn btn-success" @onclick="Buscar">Buscar</button>
+<button class="btn btn-success" @onclick="Buscar">Ordenar</button>
+<button class="btn btn-success" @onclick="Invertir">Invertir</button>
+<button class="btn btn-success" @onclick="Pares">Pares</button>
+
+
+<div class="my-3">
+    <p>Calificación mayor: @_mayor</p>
+    <p>Calificación menor: @_menor</p>
+    <p>Promedio: @_promedio.ToString("0.0")</p>
+</div>
+
+<div>
+    <div class="col">
+        <div class="alert alert-info">@_salida</div>
+    </div>
+</div>
+
+@* <h3 class="mt-3">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 1; i <= _limite; i++)
+            {
+                <tr>
+                    <td>@i.ToString() <br /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</h3> *@
+
+@* <h3 class="mt-3">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Calificaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (_calificaciones.Count() > 0)
+            {
+                @for (int i = 0; i < _limite; i++)
+                {
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@_calificaciones[i]</td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</h3> *@
+
+
+<h3 class="mt-3">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Calificaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (_calificaciones.Count() > 0)
+            {
+                @foreach (int valor in _calificaciones) // Lee todos los datos de la colección empezando en el primero y terminando por el ultimo, incremento automatico
+                {
+                    <tr>
+                        <td>@valor</td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</h3>
+
+
+@code {
+    private int _limite, _menor, _mayor, _dato;
+    private string _salida = "";
+    double _promedio;
+    private List<int> _calificaciones = new List<int>(); // new inicialistar, crear una nueva instancia onjeto es memoria
+
+    private void Pares()
+    {
+        _calificaciones = _calificaciones.Where(r => r % 2 == 0).ToList(); // Filtrar pares
+    }
+
+    private void Eliminar()
+    {
+        // _calificaciones.Remove(_dato); // Dato que se quiere eliminar
+        _calificaciones.RemoveAt(_dato); //Indice del dato que se quiere eliminar
+    }
+
+    private void Invertir()
+    {
+        _calificaciones.Reverse();
+    }
+
+    private void Buscar()
+    {
+        // _salida = (_calificaciones.Contains(_dato)) ? "ENCONTRADO" : "No encontrado"; // Reguesa true o false
+        // _salida = _calificaciones.IndexOf(_dato).ToString();
+        // _calificaciones.Insert(2, _dato);
+        _calificaciones.Sort(); //Ordenar
+    }
+
+    private void Generar()
+    {
+        Random _aleatorio = new();
+        _calificaciones.Clear(); // Método de las colecciones, clear: borra elementos que ya existen en memoria
+        for (int i = 0; i < _limite; i++)
+        {
+            _calificaciones.Add(_aleatorio.Next(/* 0, */ 11)); // Agregar elemento en la colección, al final,
+        }
+
+        _menor = 10;
+        _mayor = 0;
+        _promedio = 0;
+
+        foreach (int valor in _calificaciones)
+        {
+            if (valor < _menor)
+            {
+                _menor = valor;
+            }
+            if (valor > _mayor)
+            {
+                _mayor = valor;
+            }
+            _promedio += valor;
+        }
+        _promedio /= _limite;
+    }
+
+
+
+
+    // While
+    // int i = 1;
+    // _salida = "";
+    // while (i < _limite)
+    // {
+    //     _salida += i.ToString() + "<br>";
+    //     i++;
+    // }
+
+    // Optimización de memoria a comparación del while
+    // _salida = "";
+    // for(int i = 1; i <= _limite; i++)
+    // {
+    //     // if (i == 7)
+    //     // {
+    //     //     break; // Romper el ciclo, detiene la ejecucio
+    //     //     continue; // Detenie la interación, ignora el 7 por la condición anterior pero despues sigue, solo rompio la interacion
+
+    //     // }
+    //     _salida += i.ToString() + "<br>";
+    // }
+    //Coleccion conjunto de valores del mismo tipoo que se almancena por un mismo identificador
+}

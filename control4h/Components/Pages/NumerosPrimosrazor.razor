@@ -1,0 +1,73 @@
+﻿@page "/numerosprimos"
+@rendermode InteractiveServer
+<h3>NumerosPrimosrazor</h3>
+<div class="mb-3">
+    <label for="numeroentero" class="form-label">Numero Entero</label>
+    <input type="number" class="form-control" id="numeroentero" @bind="_numeroEntero" aria-describedby="numeroentero">
+    <br />
+</div>
+<button class="btn btn-success" @onclick="GenerarPrimos">Generar Primos</button>
+
+<br />
+
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex">
+            <div class="w-50 me-5">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Primos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (int valor in _primos)
+                        {
+                            <tr>
+                                <td>@valor</td>
+                                @* para tener acesso a los elemtos de la coleccion es con indice i , se inicia en la posicion 0 , y se va recorriendo poco  a poco*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int _numeroEntero;
+    private List<int> _primos = new List<int>();
+
+    // Primero necesitamos un metodo para verificar si un numero es primo o no
+    private bool esPrimo(int numero)
+    {
+        if(numero < 2)
+        {
+            return false;
+        }
+        for (int i = 2; i <= Math.Sqrt(numero); i++)
+        {
+            if(numero % i == 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Despues procedor a aplicar el metodo de primos 
+
+    private void GenerarPrimos()
+    {
+        _primos.Clear();
+
+        for(int i = 1; i <= _numeroEntero; i++)
+        {
+            if(esPrimo(i))
+            {
+                _primos.Add(i);
+            }
+        }
+    }
+}

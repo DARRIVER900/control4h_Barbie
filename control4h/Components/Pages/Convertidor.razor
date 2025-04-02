@@ -1,0 +1,45 @@
+﻿@page "/convertidor"
+@rendermode InteractiveServer
+<h3>Convertidor</h3>
+
+<div class="mb-3">
+    <label for="pesos" class="form-label">Pesos</label>
+    <input type="number" class="form-control" id="pesos" @bind="_pesos" aria-describedby="Pesos">
+    <br />
+    <button class="btn btn-success" @onclick="Convertir">Convertir</button>
+</div>
+<div class="mb-3 row">
+    <label for="dolares" class="col-sm-2 col-form-label">Dolares</label>
+    <div class="col-sm-10">
+        <input type="text" readonly class="form-control-plaintext" id="dolares" @bind="_conversionDolares">
+    </div>
+        <br />
+    <label for="euros" class="col-sm-2 col-form-label">Euros</label>
+    <div class="col-sm-10">
+       <input type="text" readonly class="form-control-plaintext" id="euros" @bind="_conversionEuros">
+    </div>
+    <br />
+    <label for="libras" class="col-sm-2 col-form-label">Libras</label>
+    <div class="col-sm-10">
+       <input type="text" readonly class="form-control-plaintext" id="euros" @bind="_conversionLibras">
+    </div>
+</div>
+
+
+@code {
+    private int _pesos;
+    private double _dolares = 0.050;
+    private double _euros = 0.046;
+    private double _libras = 0.039;
+
+    private double _conversionDolares;
+    private double _conversionEuros;
+    private double _conversionLibras;
+
+    private void Convertir()
+    {
+        _conversionDolares = _dolares * _pesos;
+        _conversionEuros = _euros * _pesos;
+        _conversionLibras = _libras * _pesos;
+    }
+}

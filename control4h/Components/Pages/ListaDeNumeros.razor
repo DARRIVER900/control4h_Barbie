@@ -1,0 +1,92 @@
+﻿@page "/listadenumeros"
+@rendermode InteractiveServer
+<h3>ListaDeNumeros</h3>
+<div class="mb-3">
+    <label for="numero1" class="form-label">Numero 1</label>
+    <input type="number" class="form-control" id="numero1" @bind="_numero1" aria-describedby="numero1">
+    <br />
+    <label for="numero2" class="form-label">Numero 2</label>
+    <input type="number" class="form-control" id="numero2" @bind="_numero2" aria-describedby="numero2">
+    <br />
+</div>
+<button class="btn btn-success" @onclick="Calcular">Calcular</button>
+
+<br />
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex">
+            <div class="w-50 me-5">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Pares</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (int valor in _pares)
+                            {
+                                <tr>
+                                    <td>@valor</td>
+                                    @* para tener acesso a los elemtos de la coleccion es con indice i , se inicia en la posicion 0 , y se va recorriendo poco  a poco*@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+            </div>
+
+            <div class="w-50 me-5">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Impares</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (int valor in _impares)
+                            {
+                                <tr>
+                                    <td>@valor</td>
+                                    @* para tener acesso a los elemtos de la coleccion es con indice i , se inicia en la posicion 0 , y se va recorriendo poco  a poco*@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int _numero1;
+    private int _numero2;
+    private int _fin;
+    private int _inicio;
+    private List<int> _pares = new List<int>();
+    private List<int> _impares = new List<int>();
+
+
+
+
+    private void Calcular()
+    {
+        _pares.Clear();
+        _impares.Clear();
+
+        _inicio = Math.Min(_numero1, _numero2);
+        _fin = Math.Max(_numero1, _numero2);
+
+        for (int i = _inicio; i <= _fin; i++)
+        {
+            if( i % 2 == 0)
+            {
+                _pares.Add(i);
+            }
+            else
+            {
+                _impares.Add(i);
+            }
+        }
+    }
+}

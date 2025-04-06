@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Content Remove="Components\Pages\Colecciones.razor" />
+    <Content Remove="Components\Pages\Parati.razor" />
   </ItemGroup>
 
 </Project>

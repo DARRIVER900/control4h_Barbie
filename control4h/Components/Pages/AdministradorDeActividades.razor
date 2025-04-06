@@ -1,0 +1,58 @@
+﻿@page "/administradordetareas"
+@rendermode InteractiveServer
+<h3>Lista de actividades por hacer</h3>
+
+<EditForm Model="_tarea" FormName="frmTarea" OnValidSubmit="Agregar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="mb-3">
+        <label for="txtActividad" class="form-label">Actividad</label>
+        <InputText @bind-Value="_tarea.Actividades" class="form-control" id="txtActividad" />
+        <ValidationMessage For="() =>_tarea.Actividades" />
+    </div>
+    <button type="submit" class="btn btn-success">Agregar</button>
+</EditForm>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                Actividades
+            </th>
+            <th>
+                Acciones
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Actividad actividad in _tareas)
+        {
+            <tr>
+                <td>@actividad.Actividades</td>
+
+                <td>
+                    <button class="btn btn-outline-danger" @onclick="()=>Eliminar(actividad)" />
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                    </svg>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private Actividad _tarea = new();
+    private List<Actividad> _tareas = new();
+
+    private void Agregar()
+    {
+        _tareas.Add(new Actividad { Actividades = _tarea.Actividades });
+        _tarea = new();
+    }
+    private void Eliminar(Actividad _actividad)
+    {
+        _tareas.Remove(_actividad);
+    }
+}
